@@ -40,4 +40,12 @@ describe('Plugin', () => {
         const wrappedSocket = rapport.wrap(util.mockNodeWebsocket(), { router: rapport.Router() });
         wrappedSocket.should.have.a.property('testMethod').that.is.a('function');
     });
+
+    it('Adds itself to the window if it\'s present', () => {
+        global.window = {};
+        delete require.cache[require.resolve('../lib/index.js')];
+        require('../lib/index.js');
+        global.window.should.have.a.property('RapportRouter').that.is.a('object');
+        delete global.window;
+    });
 });

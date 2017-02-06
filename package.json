@@ -32,11 +32,11 @@
     "post-commit": "0.0.1",
     "pre-commit": "^1.2.2",
     "proxyquire": "^1.7.11",
-    "rapport": "0.0.7",
+    "rapport": "0.0.8",
     "uglify-js": "^2.7.5"
   },
   "peerDependencies": {
-    "rapport": ">=0.0.7"
+    "rapport": ">=0.0.8"
   },
   "repository": {
     "type": "git",
