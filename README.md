@@ -5,6 +5,7 @@ Express style router plugin for Rapport, intended for use with [rapport-http](ht
 
 ## Installation
 Node: Install the plugin via NPM: `npm install --save rapport-router`
+
 Browser: Attach `rapport.router.min.js` to your HTML page
 
 Then add the plugin to rapport:
