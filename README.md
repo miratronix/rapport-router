@@ -1,4 +1,4 @@
-# rapport-router [![CircleCI](https://circleci.com/gh/miratronix/rapport-router.svg?style=svg)](https://circleci.com/gh/miratronix/rapport-router) [![Coverage Status](https://coveralls.io/repos/github/miratronix/rapport-router/badge.svg)](https://coveralls.io/github/miratronix/rapport-router)
+# rapport-router [![CircleCI](https://circleci.com/gh/miratronix/rapport-router.svg?style=shield)](https://circleci.com/gh/miratronix/rapport-router) [![Coverage Status](https://coveralls.io/repos/github/miratronix/rapport-router/badge.svg)](https://coveralls.io/github/miratronix/rapport-router)
 [![NPM](https://nodei.co/npm/rapport-router.png)](https://npmjs.org/package/rapport-router)
 
 Express style router plugin for Rapport, intended for use with [rapport-http](https://github.com/miratronix/rapport-http).
