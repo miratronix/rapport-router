@@ -151,6 +151,19 @@ describe('Route Chain', () => {
             errors.should.equal(1);
         });
 
+        it('Gives an error to the handler when one is supplied', () => {
+            let error = '';
+
+            const chain = routeChain.append(
+                routeChain.create('all', (err) => {
+                    error = err;
+                })
+            );
+
+            routeChain.traverse({ method: 'get' }, {}, chain, () => {}, new Error('Broken'));
+            error.should.have.a.property('message').that.equals('Broken');
+        });
+
         it('Calls next when a handler returns a promise', () => {
             return new Promise((resolve) => {
                 const chain = routeChain.create('get', () => {

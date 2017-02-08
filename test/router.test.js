@@ -3,7 +3,7 @@
 require('./index.js');
 const Router = require('../lib/router.js');
 
-describe('Router Registration', () => {
+describe('Router', () => {
 
     let router;
 
@@ -336,6 +336,117 @@ describe('Router Registration', () => {
             route.should.have.a.property('chain').that.is.an('array');
             route.chain[0].should.have.a.property('method').that.equals('get');
             route.chain[1].should.have.a.property('method').that.equals('all');
+        });
+    });
+
+    context('Can handle requests', () => {
+
+        it('Calls handlers on a regular route', () => {
+            const request = { method: 'get', url: 'test' };
+
+            router.get('test', (req) => {
+                req.handled = true;
+            });
+
+            router.handle(request, {});
+            request.should.have.a.property('handled').that.equals(true);
+        });
+
+        it('Calls handlers on a regex route', () => {
+            const request = { method: 'get', url: 'test/1' };
+
+            router.get('test/:id', (req) => {
+                req.handled = true;
+            });
+
+            router.handle(request, {});
+            request.should.have.a.property('handled').that.equals(true);
+        });
+
+        it('Adds params to the request for a regex route', () => {
+            const request = { method: 'get', url: 'test/1' };
+
+            router.get('test/:id', (req) => {});
+            router.handle(request, {});
+            request.should.have.a.property('params');
+            request.params.should.have.a.property('id').that.equals('1');
+        });
+
+        it('Sends a 404 when a no routes match', () => {
+            const request = { method: 'get', url: 'test/1' };
+
+            const response = {
+                messageSent: '',
+                statusSent: 200,
+                send: (msg) => {
+                    response.messageSent = msg;
+                },
+                status: (status) => {
+                    response.statusSent = status;
+                    return response;
+                }
+            };
+
+            router.get('/test', () => {});
+            router.all('/hello/:world', () => {});
+            router.handle(request, response);
+            response.statusSent.should.equal(404);
+            response.messageSent.should.have.a.property('message').that.equals('Not Found');
+        });
+
+        it('Calls error handlers when a 404 happens', () => {
+            const request = { method: 'get', url: 'test/1' };
+
+            router.error((err, req) => {
+                err.should.have.a.property('status').that.equals(404);
+                err.should.have.a.property('message').that.equals('Not Found');
+                req.error = true;
+            });
+
+            router.get('/test', () => {});
+            router.all('/hello/:world', () => {});
+            router.handle(request);
+            request.should.have.a.property('error').that.equals(true);
+        });
+
+        it('Calls error handlers when a handler throws', () => {
+            const request = { method: 'get', url: 'test' };
+
+            router.error((err, req) => {
+                err.should.have.a.property('message').that.equals('Nope');
+                req.error = true;
+            });
+
+            router.get('/test', () => {
+                throw new Error('Nope');
+            });
+
+            router.handle(request);
+            request.should.have.a.property('error').that.equals(true);
+        });
+
+        it('Sends the error in the error handler if an error handler throws', () => {
+            const request = { method: 'get', url: 'test/1' };
+
+            const response = {
+                messageSent: '',
+                statusSent: 200,
+                send: (msg) => {
+                    response.messageSent = msg;
+                },
+                status: (status) => {
+                    response.statusSent = status;
+                    return response;
+                }
+            };
+
+            router.error(() => {
+                throw new Error('Error handler error!');
+            });
+
+            router.handle(request, response);
+            response.statusSent.should.equal(500);
+            response.messageSent.should.have.a.property('message').that.equals('Error handler error!');
         });
     });
 });
