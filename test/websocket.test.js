@@ -51,13 +51,14 @@ describe('Websocket', () => {
 
         it('Dispatches to the router', () => {
             return new Promise((resolve) => {
-                extendWebsocket(wrappedSocket, mockSocket, {}, {
+                wrappedSocket = Rapport.wrap(mockSocket, {
                     router: {
                         handle: () => {
                             resolve();
                         }
                     }
                 });
+                extendWebsocket(wrappedSocket);
                 mockSocket.fire('message', JSON.stringify({
                     requestId: 'hey',
                     body: { url: 'url', method: 'method', body: 'body' }
@@ -67,7 +68,7 @@ describe('Websocket', () => {
 
         it('Creates a request object', () => {
             return new Promise((resolve) => {
-                extendWebsocket(wrappedSocket, mockSocket, {}, {
+                wrappedSocket = Rapport.wrap(mockSocket, {
                     router: {
                         handle: (req) => {
                             req.should.have.a.property('id').equals('hey');
@@ -79,6 +80,7 @@ describe('Websocket', () => {
                         }
                     }
                 });
+                extendWebsocket(wrappedSocket);
                 mockSocket.fire('message', JSON.stringify({
                     requestId: 'hey',
                     body: { url: 'url', method: 'method', body: 'body' }
@@ -88,7 +90,7 @@ describe('Websocket', () => {
 
         it('Parses query strings', () => {
             return new Promise((resolve) => {
-                extendWebsocket(wrappedSocket, mockSocket, {}, {
+                wrappedSocket = Rapport.wrap(mockSocket, {
                     router: {
                         handle: (req) => {
                             req.should.have.a.property('query').that.is.an('object');
@@ -97,6 +99,7 @@ describe('Websocket', () => {
                         }
                     }
                 });
+                extendWebsocket(wrappedSocket);
                 mockSocket.fire('message', JSON.stringify({
                     requestId: 'hey',
                     body: { url: 'url?test=hello', method: 'method', body: 'body' }
@@ -106,7 +109,7 @@ describe('Websocket', () => {
 
         it('Creates a response object', () => {
             return new Promise((resolve) => {
-                extendWebsocket(wrappedSocket, mockSocket, {}, {
+                wrappedSocket = Rapport.wrap(mockSocket, {
                     router: {
                         handle: (req, res) => {
                             res.should.have.a.property('_status').that.equals(200);
@@ -119,6 +122,7 @@ describe('Websocket', () => {
                         }
                     }
                 });
+                extendWebsocket(wrappedSocket);
                 mockSocket.fire('message', JSON.stringify({
                     requestId: 'hey',
                     body: { url: 'url', method: 'method', body: 'body' }
@@ -129,7 +133,7 @@ describe('Websocket', () => {
 
         it('Creates a response object that can respond', () => {
             return new Promise((resolve) => {
-                extendWebsocket(wrappedSocket, mockSocket, {}, {
+                wrappedSocket = Rapport.wrap(mockSocket, {
                     router: {
                         handle: (req, res) => {
                             res.respond('yup');
@@ -143,6 +147,7 @@ describe('Websocket', () => {
                         }
                     }
                 });
+                extendWebsocket(wrappedSocket);
                 mockSocket.fire('message', JSON.stringify({
                     requestId: 'hey',
                     body: { url: 'url', method: 'method', body: 'body' }
@@ -152,7 +157,7 @@ describe('Websocket', () => {
 
         it('Creates a response object that can respond with an error', () => {
             return new Promise((resolve) => {
-                extendWebsocket(wrappedSocket, mockSocket, {}, {
+                wrappedSocket = Rapport.wrap(mockSocket, {
                     router: {
                         handle: (req, res) => {
                             res.respondWithError('yup');
@@ -166,6 +171,7 @@ describe('Websocket', () => {
                         }
                     }
                 });
+                extendWebsocket(wrappedSocket);
                 mockSocket.fire('message', JSON.stringify({
                     requestId: 'hey',
                     body: { url: 'url', method: 'method', body: 'body' }
@@ -177,7 +183,7 @@ describe('Websocket', () => {
 
             it('Defaults the status to 200', () => {
                 return new Promise((resolve) => {
-                    extendWebsocket(wrappedSocket, mockSocket, {}, {
+                    wrappedSocket = Rapport.wrap(mockSocket, {
                         router: {
                             handle: (req, res) => {
                                 res.send('yup');
@@ -193,6 +199,7 @@ describe('Websocket', () => {
                             }
                         }
                     });
+                    extendWebsocket(wrappedSocket);
                     mockSocket.fire('message', JSON.stringify({
                         requestId: 'hey',
                         body: { url: 'url', method: 'method', body: 'body' }
@@ -202,7 +209,7 @@ describe('Websocket', () => {
 
             it('Can send a defined status', () => {
                 return new Promise((resolve) => {
-                    extendWebsocket(wrappedSocket, mockSocket, {}, {
+                    wrappedSocket = Rapport.wrap(mockSocket, {
                         router: {
                             handle: (req, res) => {
                                 res.status(250).send('250?');
@@ -218,6 +225,7 @@ describe('Websocket', () => {
                             }
                         }
                     });
+                    extendWebsocket(wrappedSocket);
                     mockSocket.fire('message', JSON.stringify({
                         requestId: 'hey',
                         body: { url: 'url', method: 'method', body: 'body' }
@@ -227,7 +235,7 @@ describe('Websocket', () => {
 
             it('Sends an error when the status isn\'t 2xx', () => {
                 return new Promise((resolve) => {
-                    extendWebsocket(wrappedSocket, mockSocket, {}, {
+                    wrappedSocket = Rapport.wrap(mockSocket, {
                         router: {
                             handle: (req, res) => {
                                 res.status(400).send('nope');
@@ -243,6 +251,7 @@ describe('Websocket', () => {
                             }
                         }
                     });
+                    extendWebsocket(wrappedSocket);
                     mockSocket.fire('message', JSON.stringify({
                         requestId: 'hey',
                         body: { url: 'url', method: 'method', body: 'body' }
