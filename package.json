@@ -1,6 +1,6 @@
 {
   "name": "rapport-router",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Express style router plugin for Rapport",
   "main": "lib/index.js",
   "scripts": {
@@ -33,11 +33,11 @@
     "post-commit": "0.0.1",
     "pre-commit": "^1.2.2",
     "proxyquire": "^1.7.11",
-    "rapport": "0.0.15",
+    "rapport": "0.1.0",
     "uglify-js": "^2.7.5"
   },
   "peerDependencies": {
-    "rapport": ">=0.0.15"
+    "rapport": ">=0.1.0"
   },
   "repository": {
     "type": "git",
