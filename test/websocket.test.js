@@ -114,6 +114,7 @@ describe('Websocket', () => {
                         router: {
                             handle: (req, res) => {
                                 res.should.have.a.property('_status').that.equals(200);
+                                res.should.have.a.property('_body').that.equals(undefined);
                                 res.should.have.a.property('sent').that.equals(false);
                                 res.should.have.a.property('status').that.is.a('function');
                                 res.should.have.a.property('respond').that.is.a('function');
