@@ -106,6 +106,44 @@ describe('Websocket', () => {
             });
         });
 
+        it('Parses query strings with two duplicate parameters', () => {
+            return new Promise((resolve) => {
+                wrappedSocket = Rapport.wrap(mockSocket, {
+                    router: {
+                        handle: (req) => {
+                            req.should.have.a.property('query').that.is.an('object');
+                            req.query.should.have.a.property('test').that.deep.equals(['foo', 'bar']);
+                            resolve();
+                        }
+                    }
+                });
+                extendWebsocket(wrappedSocket);
+                mockSocket.fire('message', JSON.stringify({
+                    _rq: 'hey',
+                    _b: { _u: 'url?test=foo&test=bar', _m: 'method', _b: 'body' }
+                }));
+            });
+        });
+
+        it('Parses query strings with three or more duplicate parameters', () => {
+            return new Promise((resolve) => {
+                wrappedSocket = Rapport.wrap(mockSocket, {
+                    router: {
+                        handle: (req) => {
+                            req.should.have.a.property('query').that.is.an('object');
+                            req.query.should.have.a.property('test').that.deep.equals(['foo', 'bar', 'baz']);
+                            resolve();
+                        }
+                    }
+                });
+                extendWebsocket(wrappedSocket);
+                mockSocket.fire('message', JSON.stringify({
+                    _rq: 'hey',
+                    _b: { _u: 'url?test=foo&test=bar&test=baz', _m: 'method', _b: 'body' }
+                }));
+            });
+        });
+
         context('Creates a response object', () => {
 
             it('Is created', () => {
