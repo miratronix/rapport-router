@@ -30,6 +30,21 @@ describe('Route Chain', () => {
             chain[1].should.have.a.property('method').that.equals('all');
             chain[1].should.have.a.property('handle').that.equals(handlerTwo);
         });
+
+        it('Creates a chain when an array of functions is supplied', () => {
+            const handlerOne = () => {};
+            const handlerTwo = () => {};
+            const handlerThree = () => {};
+            const chain = routeChain.create('all', [handlerOne, handlerTwo], handlerThree);
+
+            chain.should.have.a.property('length').that.equals(3);
+            chain[0].should.have.a.property('method').that.equals('all');
+            chain[0].should.have.a.property('handle').that.equals(handlerOne);
+            chain[1].should.have.a.property('method').that.equals('all');
+            chain[1].should.have.a.property('handle').that.equals(handlerTwo);
+            chain[2].should.have.a.property('method').that.equals('all');
+            chain[2].should.have.a.property('handle').that.equals(handlerThree);
+        });
     });
 
     context('Can determine handled methods', () => {

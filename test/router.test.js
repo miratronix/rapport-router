@@ -87,6 +87,17 @@ describe('Router', () => {
             route.chain[1].should.have.a.property('method').that.equals('all');
         });
 
+        it('Can add a flattened array of handlers to a route', () => {
+            router.all('/test', [() => {}, () => {}], () => {});
+            router.getRoutes().should.have.a.property('test').that.is.an('object');
+            const route = router.getRoutes().test;
+            route.should.have.a.property('handledMethods').that.has.a.property('all');
+            route.should.have.a.property('chain').that.is.an('array');
+            route.chain[0].should.have.a.property('method').that.equals('all');
+            route.chain[1].should.have.a.property('method').that.equals('all');
+            route.chain[2].should.have.a.property('method').that.equals('all');
+        });
+
         it('Can add a handler to multiple routes', () => {
             router.all(['/test', '/yeah'], () => {});
             router.getRoutes().should.have.a.property('test').that.is.an('object');
