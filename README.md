@@ -55,6 +55,10 @@ router.get(['/users', '/people'], () => {}, () => {}); // For routes
 router.use(() => {}, () => {}); // For middleware
 router.use(['/v1', '/v2'], router1, router2); // And for routers
 
+// Handler arrays are flattened recursively. Thus, the following two lines are equivalent
+router.use('/v1', [() => {}, () => {}], () => {});
+router.use('/v1', () => {}, () => {}, () => {});
+
 // Returning a promise calls next automatically when the promise resolves
 router.get('/user', 
     (req, res) => {
