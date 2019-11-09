@@ -1,6 +1,6 @@
 {
   "name": "rapport-router",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Express style router plugin for Rapport",
   "main": "lib/index.js",
   "scripts": {
