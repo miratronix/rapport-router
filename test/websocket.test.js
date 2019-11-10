@@ -29,6 +29,22 @@ describe('Websocket', () => {
         });
     });
 
+    it('Handles double wrapping', () => {
+        extendWebsocket(wrappedSocket);
+        extendWebsocket(wrappedSocket);
+        return new Promise((resolve) => {
+            wrappedSocket.onMessage((msg, ws) => {
+                msg.isRequest.should.equal(false);
+                msg.should.have.a.property('body');
+                msg.body.should.have.a.property('hello').that.equals('world');
+                ws.should.deep.equal(wrappedSocket);
+                ws.should.not.have.a.property('_status');
+                resolve();
+            });
+            mockSocket.fire('message', JSON.stringify({ hello: 'world' }));
+        });
+    });
+
     it('Still handles requests', () => {
         extendWebsocket(wrappedSocket);
         return new Promise((resolve) => {

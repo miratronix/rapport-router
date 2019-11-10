@@ -72,7 +72,14 @@ router.get('/user',
 
 // You can add also add a error handler to all routes
 router.error((err, req, res, next) => {
-    console.log(`Encountered an error!`);
+    
+    // Explicitly try-catch when you send the response in your final error handler, to handle cases when the websocket 
+    // is closed while handling the request.
+    try {
+        res.status(500).send('Something went wrong :(');
+    } catch (err) {
+        console.log('Failed to send the error response:', err);
+    }
 });
 ```
 

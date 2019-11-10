@@ -377,7 +377,7 @@ describe('Router', () => {
         it('Adds params to the request for a regex route', () => {
             const request = { method: 'get', url: 'test/1' };
 
-            router.get('test/:id', (req) => {});
+            router.get('test/:id', () => {});
             router.handle(request, {});
             request.should.have.a.property('params');
             request.params.should.have.a.property('id').that.equals('1');
@@ -458,6 +458,30 @@ describe('Router', () => {
             router.handle(request, response);
             response.statusSent.should.equal(500);
             response.messageSent.should.have.a.property('message').that.equals('Error handler error!');
+        });
+
+        it('Doesn\'t throw when the final error handler throws', () => {
+            const request = { method: 'get', url: 'test/1' };
+
+            const response = {
+                messageSent: '',
+                statusSent: 200,
+                send: () => {
+                    throw new Error('Whoops');
+                },
+                status: (status) => {
+                    response.statusSent = status;
+                    return response;
+                }
+            };
+
+            router.error(() => {
+                throw new Error('Error handler error!');
+            });
+
+            router.handle(request, response);
+            response.statusSent.should.equal(500);
+            response.messageSent.should.equal('');
         });
     });
 });
